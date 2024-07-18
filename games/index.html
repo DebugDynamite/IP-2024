@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated Project - Group 4</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="button-grid">
+        <!-- <div onclick="location.href = 'programs/Angry Birds'" class="game-select-div" id="robin-rage-btn"> -->
+        <div class="game-select-div disabled-btn" id="robin-rage-btn" disabled="true">
+            <img src="assets/robin-rage.png" style="height: 80%">
+            <p>Play Robin's Rage (under development)</p>
+        </div>
+        <div onclick="location.href = 'programs/Plinko'" hidden class="game-select-div" id="plinko-btn">
+            <img src="assets/plinko.png" style="height: 80%">
+            <p>Play Plinko</p>
+        </div>
+        <div onclick="location.href = 'programs/Newton Cradle'" class="game-select-div" id="newton-cradle-btn" hidden>
+            <img src="assets/newton-cradle.png" style="height: 80%">
+            <p>Play Newton's Cradle</p>
+        </div>
+    </div>
+    <button id="back-btn" onclick="location.href = '../index.html'">
+        <img src="assets/back.jpg" style="width:100%;">
+    </button>
+
+    <img id="prev-btn" class="game-nav-btn" src="assets/prev.png">
+
+    <img id="next-btn" class="game-nav-btn" src="assets/next.png" >
+    <script src="sketch.js"></script>
+</body>
+
+</html>

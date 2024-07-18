@@ -1,0 +1,6 @@
+class Barrier {
+    constructor() {
+    }
+    display() {
+    }
+}

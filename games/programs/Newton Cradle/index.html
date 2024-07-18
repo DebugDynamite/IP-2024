@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Cradle Simulator</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      background-color: black;
+    }
+
+    #back-btn {
+      position: fixed;
+      top: 2%;
+      left: 1%;
+      width: 5%;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      filter: invert(1);
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+  <script src="p5.play.js"></script>
+  <script src="Bob.js"></script>
+  <script src="Board.js"></script>
+  <script src="Rope.js"></script>
+</head>
+
+<body>
+  <button id="back-btn" onclick="location.href = '../index.html'">
+    <img src="../../assets/back.jpg" style="width:100%;">
+  </button>
+  <script src="sketch.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+body {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    /* zoom: 0.9 */
+}
+
+canvas {
+    border: 3px solid black;
+    border-radius: 15px;
+}
+
+#back-btn {
+    position: fixed;
+    bottom: 2%;
+    left: 1%;
+    width: 5%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
