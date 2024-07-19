@@ -8,7 +8,7 @@ class Bird {
         // Matter.Body.setMass(this.body, this.body.mass * 4);
         this.body.label = "Bird";
         this.r = r;
-        this.image = loadImage("sprites/Bird.png");
+        this.image = loadImage("sprites/bird.png");
         this.smokeImage = loadImage("sprites/smoke.png");
         this.trajectory = [];
         this.smokeVisibility = 255;
