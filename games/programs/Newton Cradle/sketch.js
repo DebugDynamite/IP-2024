@@ -1,10 +1,10 @@
-var Engine = Matter.Engine;
-var World = Matter.World;
-var Bodies = Matter.Bodies;
-var Body = Matter.Body;
-var Constraint = Matter.Constraint;
-var MouseConstraint = Matter.MouseConstraint;
-var Mouse = Matter.Mouse;
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const Body = Matter.Body;
+const Constraint = Matter.Constraint;
+const MouseConstraint = Matter.MouseConstraint;
+const Mouse = Matter.Mouse;
 
 var topBoard;
 
