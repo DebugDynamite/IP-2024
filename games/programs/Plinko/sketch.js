@@ -14,10 +14,12 @@ var bounds = [];
 var rows = 10;
 var colsMax = 11;
 var colsMin = 10;
-var offset = 50;
+var offset = 50
 var plinkoWidth = 15;
 
 var wallCount = 10;
+
+var zoom = 1;
 
 function setup() {
     createCanvas(600, 800);
@@ -34,6 +36,11 @@ function setup() {
 function draw() {
     background(0);
     Engine.update(engine, 1000 / 30);
+
+    canvas.focus();
+
+    adjustScreen();
+
     if (frameCount % 30 === 0) {
         spawnParticle();
     }
@@ -100,7 +107,7 @@ function spawnWalls() {
 }
 
 function collisionEvent(event) {
-    var pairs = event.pairs;    for (var i in pairs) {
+    var pairs = event.pairs; for (var i in pairs) {
         var bodyA = pairs[i].bodyA;
         var bodyB = pairs[i].bodyB;
         var labelA = bodyA.label;
@@ -112,4 +119,15 @@ function collisionEvent(event) {
             });
         }
     }
-}   
+}
+
+function adjustScreen() {
+    if (window.innerHeight < height) {
+        zoom = (((window.innerHeight / height) * 100) - 1) + "%";
+    }
+    if (window.innerWidth < width) {
+        zoom = (((window.innerWidth / width) * 100) - 1) + "%";
+    }
+    canvas.style.zoom = zoom;
+    document.getElementById("back-btn").style.zoom = zoom;
+}

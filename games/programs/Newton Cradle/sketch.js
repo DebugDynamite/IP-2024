@@ -13,11 +13,20 @@ var bobs = [];
 var thickness = 10;
 var mConstraint;
 
+var defaultWidth, defaultHeight, innerWidth, innerHeight, adjustedRatio, adjustedWidth, adjustedHeight;
+
+var boardY;
+
 function setup() {
-    createCanvas(900, 600);
+    adjustScreen();
+
+    createCanvas(adjustedWidth, adjustedHeight);
     engine = Engine.create();
     world = engine.world;
-    topBoard = new Board(width / 2, 200);
+
+    boardY = 200 / adjustedRatio;
+
+    topBoard = new Board(width / 2, boardY, adjustedRatio);
 
     Engine.run(engine);
     spawnBeads();
@@ -31,6 +40,8 @@ function draw() {
     ellipseMode(RADIUS);
     background(0);
 
+    // document.style.zoom = (((window.innerHeight / 708) * 100) - 1) + "%";
+
     for (var i in bobs) {
         showBob(bobs[i]);
     }
@@ -39,27 +50,27 @@ function draw() {
     push();
     textAlign(CENTER);
     fill("white");
-    textSize(40);
-    text("Newton's Cradle", width / 2, 100)
+    textSize(40 / adjustedRatio);
+    text("Newton's Cradle", width / 2, (100 / adjustedRatio))
     pop();
 }
 
 function spawnBeads() {
-    var r = 30;
+    var r = 30 / adjustedRatio;
     var spacing = 2 * r;
     var offset = (width / 2) - (4 * r);
-    var y = 400;
+    var y = 400 / adjustedRatio;
     for (var i = 0; i < bobCount; i++) {
         var x = i * spacing + offset;
         var bob = new Bob(x, y, r);
         bobs.push(bob);
-        var joint = new Rope(bob.body, { x: bob.body.position.x, y: 200 });
+        var joint = new Rope(bob.body, { x: bob.body.position.x, y: boardY }, adjustedRatio);
         bob.joint = joint;
     }
 }
 
 function showBob(bob) {
-    bob.joint.display();
+    bob.joint.display(adjustedRatio);
     bob.display();
 }
 
@@ -72,4 +83,24 @@ function setMConstraint() {
     };
     mConstraint = MouseConstraint.create(engine, mouseConstraintOptions);
     World.add(world, mConstraint);
+}
+
+function adjustScreen() {
+    defaultWidth = 900;
+    defaultHeight = 600;
+
+    innerWidth = window.innerWidth;
+    innerHeight = window.innerHeight;
+
+    if (innerHeight < defaultHeight) {
+        adjustedRatio = defaultHeight / innerHeight;
+
+        adjustedWidth = defaultWidth / adjustedRatio;
+        adjustedHeight = innerHeight;
+    }
+    else {
+        adjustedRatio = 1;
+        adjustedWidth = defaultWidth;
+        adjustedHeight = defaultHeight;
+    }
 }

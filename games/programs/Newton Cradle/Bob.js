@@ -2,7 +2,8 @@ class Bob {
     constructor(x, y, r) {
         var options = {
             restitution: 1.18,
-            friction: 0.02
+            friction: 0.02,
+            density: 0.1
         }
         this.body = Bodies.circle(x, y, r, options);
         World.add(world, this.body);

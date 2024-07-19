@@ -1,13 +1,13 @@
 class Board {
-    constructor(x, y) {
+    constructor(x, y, ratio) {
         var options = {
             restitution: 0.8,
             friction: 1.0,
             density: 1.0,
             isStatic: true
         }
-        this.width = 350;
-        this.height = 30;
+        this.width = 350 / ratio;
+        this.height = 30 / ratio;
         this.body = Bodies.rectangle(x, y, this.width, this.height, options);
         World.add(world, this.body);
     }

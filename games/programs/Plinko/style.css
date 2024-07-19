@@ -6,6 +6,10 @@ body {
     background-color: black;
 }
 
+canvas {
+    border-bottom: 10px solid red;
+}
+
 #back-btn {
     position: fixed;
     top: 2%;

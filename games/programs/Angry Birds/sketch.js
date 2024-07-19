@@ -25,7 +25,7 @@ var birdReleased = false;
 
 var groundHeight = 50;
 
-var slingImg1, slingImg2, woodImg1, woodImg2, bg;
+var slingImg1, slingImg2, woodImg1, woodImg2, bg, birdImg;
 
 var maxObstacles = 7;
 
@@ -40,19 +40,43 @@ var physicsDataEndFetched = false;
 
 var physicsData;
 
+var barrier1;
+var goal;
+
+var goalEffectComplete = false;
+
+var birdImgPos = [];
+var birdLandPos;
+var birdReached = false;
+
 function preload() {
     slingImg1 = loadImage('sprites/sling1.png');
     slingImg2 = loadImage('sprites/sling2.png');
     woodImg1 = loadImage('sprites/wood1.png');
     woodImg2 = loadImage('sprites/wood2.png');
     bg = loadImage('sprites/bg.png');
+    birdImg = loadImage("sprites/Bird.png")
 }
 
 function setup() {
-    createCanvas(1200, 500);
+    createCanvas(1200, 600);
     engine = Engine.create();
     world = engine.world;
-    
+
+    goal = {
+        x: width - 200,
+        w: 150,
+        h: 200,
+        barrier_w: 15,
+        barrier_h: 100
+    }
+    goal.y = height - (goal.h / 2);
+    goal.barrier_y = goal.y + (goal.barrier_h / 2);
+
+    barrier1 = new Barrier(goal.x - (goal.w / 2), goal.barrier_y, goal.barrier_w, goal.barrier_h);
+    barrier2 = new Barrier(goal.x + (goal.w / 2), goal.barrier_y, goal.barrier_w, goal.barrier_h);
+    goal = new Goal(goal.x, goal.y, goal.w, 15);
+
     spawnBird();
     spawnSlingshot();
     generateGround();
@@ -63,72 +87,82 @@ function setup() {
 function draw() {
     background(bg);
     Engine.update(engine, 1000 / 30);
-    text("X: " + mouseX, 400, 80);
-    text("Y: " + mouseY, 400, 120);
 
     terrain.display();
     slingy.display();
     slingshot.display(2);
     bird.display();
     slingshot.display(1);
+    goal.display();
 
-    if (birdReachCheck()) {
+    if (!birdReached) birdReachCheck();
+
+    if (birdReached) {
         reachTimerStart = false;
         gameEnded = true;
         displayPhysicsStats();
     }
 
     if (reachTimerStart && !gameEnded) {
-        getRealTimeBirdStats();
         reachTimer++;
     }
-}
-
-function getRealTimeBirdStats() {
-    var body = bird.body
-    var speed = body.speed.toFixed(3);
-    text("Speed: " + speed, 200, 50);
-    speeds.push(speed);
 }
 
 function displayPhysicsStats() {
     if (!physicsDataEndFetched) physicsData = getPhysicsAtEnd();
 
-    text(physicsData.timeTaken + " sec", 200, 80);
-    text("Distance: " + physicsData.distanceTravelled + " pixels", 200, 120);
+    push();
+    tint(255, 100);
+    imageMode(CENTER);
+    for (var i = 0; i < birdImgPos.length; i++) {
+        image(birdImg, birdImgPos[i].x, birdImgPos[i].y);
+    }
+    strokeWeight(3);
+    ellipse(characterX, birdLandPos.y, 7.5);
+    line(characterX, birdLandPos.y, birdLandPos.x, birdLandPos.y);
+    line(birdLandPos.x, birdLandPos.y, birdLandPos.x - 11, birdLandPos.y - 7);
+    line(birdLandPos.x, birdLandPos.y, birdLandPos.x - 11, birdLandPos.y + 7);
+    textSize(20);
+    textAlign(CENTER);
+    var textX = (characterX + (physicsData.displacement / 2));
+    var textY = birdLandPos.y
+    text("Time taken: " + physicsData.timeTaken + " sec", textX, textY - 90);
+    text("Displacement: " + physicsData.displacement + " pixels", textX, textY - 60);
+    text("Average Velocity: " + physicsData.avgVelo + " pixels per second", textX, textY - 30);
+    textSize(50);
+    fill("yellow");
+    stroke("black");
+    strokeWeight(4);
+    if (physicsData.goalAchieved) {
+        text("What an aim..!", width / 2, height / 2 - 100);
+    }
+    else {
+        text("Nishaana thoda kachha he..!", width / 2, height / 2 - 100);
+    }
+    pop();
 }
 
 function getPhysicsAtEnd() {
     physicsDataEndFetched = true;
-    var timeTaken = (reachTimer / 30).toFixed(3);
-    var distanceTravelled = 0;
-    for (var i = 0; i < bird.trajectory.length; i++) {
-        if (bird.trajectory[i + 1]) {
-            var difference = getDifference(
-                bird.trajectory[i + 1][0],
-                bird.trajectory[i + 1][1],
-                bird.trajectory[i][0],
-                bird.trajectory[i][1]
-            );
-            // console.log(bird.trajectory[i + 1][0],
-            //     bird.trajectory[i + 1][1],
-            //     bird.trajectory[i][0],
-            //     bird.trajectory[i][1],
-            //     difference);
-            // ;
-            distanceTravelled += difference;
-        }
+    birdLandPos = { x: bird.body.position.x, y: bird.body.position.y }
+    for (var i = 0; i < bird.trajectory.length; i += 5) {
+        birdImgPos.push({ x: bird.trajectory[i][0], y: bird.trajectory[i][1] });
     }
-    // var totalSpeed = 0;
-    // for (var i in speeds) {
-    //     totalSpeed += parseFloat(i);
-    // }
-    // var avgSpeed = totalSpeed / speeds.length;
-    // var distanceTravelled = (avgSpeed * timeTaken).toFixed(1);
 
+    var timeTaken = (reachTimer / 30).toFixed(3);
+    var body = bird.body;
+    var displacement = (body.position.x - characterX).toFixed(3);
+    var avgVelo = (displacement / timeTaken).toFixed(3);
+    var goalAchieved =
+        (birdLandPos.x > goal.x - (goal.w / 2))
+        && (birdLandPos.x < goal.x + (goal.w / 2))
+
+    text("Avg. Velocity: " + avgVelo, 200, 50);
     var physics = {
         timeTaken: timeTaken,
-        distanceTravelled: distanceTravelled
+        displacement: displacement,
+        avgVelo: avgVelo,
+        goalAchieved: goalAchieved
     }
     return physics;
 }
@@ -141,7 +175,7 @@ function getDifference(x1, y1, x2, y2) {
 }
 
 function spawnBird() {
-    bird = new Bird(characterX, 200, 22);
+    bird = new Bird(characterX, 450, 22);
 }
 
 function generateGround() {
@@ -180,6 +214,7 @@ function setMConstraint() {
 function birdReachCheck() {
     var birdPos = bird.body.position;
     var result = birdPos.y >= height - bird.r;
+    if (result) birdReached = true;
     return result;
 }
 

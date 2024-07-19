@@ -8,22 +8,24 @@
 
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="style.css">
+
+    <script src="p5.js"></script>
+    <script src="p5.play.js"></script>
 </head>
 
 <body>
     <div id="button-grid">
-        <!-- <div onclick="location.href = 'programs/Angry Birds'" class="game-select-div" id="robin-rage-btn"> -->
-        <div class="game-select-div disabled-btn" id="robin-rage-btn" disabled="true">
+        <div onclick="location.href = 'programs/Angry Birds'" class="game-select-div" id="robin-rage-btn">
             <img src="assets/robin-rage.png" style="height: 80%">
-            <p>Play Robin's Rage (under development)</p>
+            <p class="play-game-txt">Play Robin's Rage</p>
         </div>
         <div onclick="location.href = 'programs/Plinko'" hidden class="game-select-div" id="plinko-btn">
             <img src="assets/plinko.png" style="height: 80%">
-            <p>Play Plinko</p>
+            <p class="play-game-txt">Play Plinko</p>
         </div>
         <div onclick="location.href = 'programs/Newton Cradle'" class="game-select-div" id="newton-cradle-btn" hidden>
             <img src="assets/newton-cradle.png" style="height: 80%">
-            <p>Play Newton's Cradle</p>
+            <p class="play-game-txt">Play Newton's Cradle</p>
         </div>
     </div>
     <button id="back-btn" onclick="location.href = '../index.html'">
@@ -33,7 +35,14 @@
     <img id="prev-btn" class="game-nav-btn" src="assets/prev.png">
 
     <img id="next-btn" class="game-nav-btn" src="assets/next.png" >
+
+    <div id="orientation-change-msg" hidden>
+        <h1>
+            TO <br> VIEW <br> THE <br> CONTENT, <br> ROTATE <br> YOUR <br> DEVICE
+        </h1>
+    </div>
     <script src="sketch.js"></script>
+    <script src="slider.js"></script>
 </body>
 
 </html>
