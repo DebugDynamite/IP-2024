@@ -55,7 +55,7 @@ function preload() {
     woodImg1 = loadImage('sprites/wood1.png');
     woodImg2 = loadImage('sprites/wood2.png');
     bg = loadImage('sprites/bg.png');
-    birdImg = loadImage("sprites/Bird.png")
+    birdImg = loadImage("sprites/bird.png");
 }
 
 function setup() {
