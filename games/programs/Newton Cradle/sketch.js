@@ -1,8 +1,8 @@
-const Engine = Matter.Engine;
-const World = Matter.World;
-const Bodies = Matter.Bodies;
-const Body = Matter.Body;
-const Constraint = Matter.Constraint;
+var Engine = Matter.Engine;
+var World = Matter.World;
+var Bodies = Matter.Bodies;
+var Body = Matter.Body;
+var Constraint = Matter.Constraint;
 var MouseConstraint = Matter.MouseConstraint;
 var Mouse = Matter.Mouse;
 

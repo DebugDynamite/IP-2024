@@ -14,8 +14,8 @@ function setup() {
 
     activeBtn = 0;
     delay = 200;
-    windowWidthInit = windowWidth
-    windowHeightInit = windowHeight
+    windowWidthInit = windowWidth;
+    windowHeightInit = windowHeight;
 
     startSlide();
 }

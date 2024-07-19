@@ -16,11 +16,8 @@ var terrain;
 var bird;
 var slingshot;
 var slingy;
-var characterX = 250;
-var slingAttachPoint = {
-    x: characterX,
-    y: 0
-}
+var characterX;
+var slingAttachPoint;
 var birdReleased = false;
 
 var groundHeight = 50;
@@ -49,6 +46,11 @@ var birdImgPos = [];
 var birdLandPos;
 var birdReached = false;
 
+var defaultWidth, defaultHeight, adjustedRatio, adjustedWidth, adjustedHeight;
+
+var windowWidthInit;
+var windowHeightInit;
+
 function preload() {
     slingImg1 = loadImage('sprites/sling1.png');
     slingImg2 = loadImage('sprites/sling2.png');
@@ -59,23 +61,36 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(1200, 600);
+    adjustScreen();
+
+    createCanvas(adjustedWidth, adjustedHeight);
     engine = Engine.create();
     world = engine.world;
 
+    windowWidthInit = windowWidth;
+    windowHeightInit = windowHeight;
+    
+    adjustedRatio -= adjustedRatio == 1 ? 0 : 0.4;
+
     goal = {
-        x: width - 200,
-        w: 150,
-        h: 200,
-        barrier_w: 15,
-        barrier_h: 100
+        x: width - (200 / adjustedRatio),
+        w: 130 / adjustedRatio,
+        h: 200 / adjustedRatio,
+        barrier_w: 15 / adjustedRatio,
+        barrier_h: 100 / adjustedRatio
     }
     goal.y = height - (goal.h / 2);
     goal.barrier_y = goal.y + (goal.barrier_h / 2);
 
     barrier1 = new Barrier(goal.x - (goal.w / 2), goal.barrier_y, goal.barrier_w, goal.barrier_h);
     barrier2 = new Barrier(goal.x + (goal.w / 2), goal.barrier_y, goal.barrier_w, goal.barrier_h);
-    goal = new Goal(goal.x, goal.y, goal.w, 15);
+    goal = new Goal(goal.x, goal.y, goal.w, 15 / adjustedRatio);
+
+    characterX = 250 / adjustedRatio;
+    slingAttachPoint = {
+        x: characterX,
+        y: 0
+    }
 
     spawnBird();
     spawnSlingshot();
@@ -94,6 +109,10 @@ function draw() {
     bird.display();
     slingshot.display(1);
     goal.display();
+    
+    if (windowWidth !== windowWidthInit || windowHeight !== windowHeightInit) {
+        location.reload();
+    }
 
     if (!birdReached) birdReachCheck();
 
@@ -112,32 +131,32 @@ function displayPhysicsStats() {
     if (!physicsDataEndFetched) physicsData = getPhysicsAtEnd();
 
     push();
-    tint(255, 100);
+    tint(255, 125);
     imageMode(CENTER);
     for (var i = 0; i < birdImgPos.length; i++) {
-        image(birdImg, birdImgPos[i].x, birdImgPos[i].y);
+        image(birdImg, birdImgPos[i].x, birdImgPos[i].y, bird.r * 2, bird.r * 2);
     }
-    strokeWeight(3);
+    strokeWeight(3 / adjustedRatio);
     ellipse(characterX, birdLandPos.y, 7.5);
     line(characterX, birdLandPos.y, birdLandPos.x, birdLandPos.y);
     line(birdLandPos.x, birdLandPos.y, birdLandPos.x - 11, birdLandPos.y - 7);
     line(birdLandPos.x, birdLandPos.y, birdLandPos.x - 11, birdLandPos.y + 7);
-    textSize(20);
+    textSize(20 / adjustedRatio);
     textAlign(CENTER);
     var textX = (characterX + (physicsData.displacement / 2));
     var textY = birdLandPos.y
-    text("Time taken: " + physicsData.timeTaken + " sec", textX, textY - 90);
-    text("Displacement: " + physicsData.displacement + " pixels", textX, textY - 60);
-    text("Average Velocity: " + physicsData.avgVelo + " pixels per second", textX, textY - 30);
-    textSize(50);
+    text("Time taken: " + physicsData.timeTaken + " sec", textX, textY - (90 / adjustedRatio));
+    text("Displacement: " + physicsData.displacement + " pixels", textX, textY - (60 / adjustedRatio));
+    text("Average Velocity: " + physicsData.avgVelo + " pixels per second", textX, textY - (30 / adjustedRatio));
+    textSize((50 / adjustedRatio));
     fill("yellow");
     stroke("black");
-    strokeWeight(4);
+    strokeWeight((4 / adjustedRatio));
     if (physicsData.goalAchieved) {
-        text("What an aim..!", width / 2, height / 2 - 100);
+        text("What an aim..!", width / 2, height / 2 - (100 / adjustedRatio));
     }
     else {
-        text("Nishaana thoda kachha he..!", width / 2, height / 2 - 100);
+        text("Nishaana thoda kachha he..!", width / 2, height / 2 - (100 / adjustedRatio));
     }
     pop();
 }
@@ -157,7 +176,6 @@ function getPhysicsAtEnd() {
         (birdLandPos.x > goal.x - (goal.w / 2))
         && (birdLandPos.x < goal.x + (goal.w / 2))
 
-    text("Avg. Velocity: " + avgVelo, 200, 50);
     var physics = {
         timeTaken: timeTaken,
         displacement: displacement,
@@ -175,7 +193,7 @@ function getDifference(x1, y1, x2, y2) {
 }
 
 function spawnBird() {
-    bird = new Bird(characterX, 450, 22);
+    bird = new Bird(characterX, 450 / adjustedRatio, 22 / adjustedRatio);
 }
 
 function generateGround() {
@@ -184,16 +202,16 @@ function generateGround() {
 }
 
 function spawnSlingshot() {
-    var h = 30;
-    var y = height - (groundHeight / 2) - 55
-    var w = 20;
-    var x = characterX + 30;
+    var h = 30 / adjustedRatio;
+    var y = height - (groundHeight / 2) - (55 / adjustedRatio)
+    var w = 20 / adjustedRatio;
+    var x = characterX + (30 / adjustedRatio);
     slingshot = new Slingshot(x, y, w, h);
 
-    var h = 160;
-    var y = (height - groundHeight) - (h / 2) + 50;
+    var h = 160 / adjustedRatio;
+    var y = (height - groundHeight) - (h / 2) + (50 / adjustedRatio);
     slingAttachPoint.y = (y - (h / 2));
-    slingAttachPoint.x += 20;
+    slingAttachPoint.x += 20 / adjustedRatio;
 
     slingy = new Slingy(slingAttachPoint, bird.body);
 }
@@ -229,4 +247,25 @@ function mouseReleased() {
 
 function randomNum(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function adjustScreen() {
+    defaultWidth = 1200;
+    defaultHeight = 600;
+
+    adjustedRatio = 1;
+    if (defaultWidth > innerWidth) {
+        adjustedRatio *= defaultWidth / innerWidth;
+        adjustedRatio += 0.2;
+    }
+    adjustedWidth = defaultWidth / adjustedRatio;
+    adjustedHeight = defaultHeight / adjustedRatio;
+    if (adjustedHeight > innerHeight) {
+        adjustedRatio *= adjustedHeight / innerHeight;
+        adjustedRatio += 0.2;
+    }
+    adjustedWidth = defaultWidth / adjustedRatio;
+    adjustedHeight = defaultHeight / adjustedRatio;
+
+    // alert(adjustedRatio + "\n" + defaultWidth + "\n" + defaultHeight + "\n" + innerWidth + "\n" + innerHeight + "\n" + adjustedWidth + "\n" + adjustedHeight);
 }

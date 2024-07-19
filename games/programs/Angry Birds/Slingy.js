@@ -22,9 +22,9 @@ class Slingy {
             var bodyPos = this.chain.bodyB.position;
             push();
             stroke(70, 20, 20);
-            strokeWeight(5);
-            line(pointPos.x - 20, pointPos.y, bodyPos.x - 15, bodyPos.y);
-            line(pointPos.x + 20, pointPos.y, bodyPos.x + 15, bodyPos.y);
+            strokeWeight(5 / adjustedRatio);
+            line(pointPos.x - (20 / adjustedRatio), pointPos.y + 7 * adjustedRatio, bodyPos.x - (15 / adjustedRatio), bodyPos.y);
+            line(pointPos.x + (20 / adjustedRatio), pointPos.y + 7 * adjustedRatio, bodyPos.x + (15 / adjustedRatio), bodyPos.y);
             pop();
         }
     }

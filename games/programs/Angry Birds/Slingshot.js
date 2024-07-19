@@ -21,10 +21,10 @@ class Slingshot {
         rectMode(CENTER);
         imageMode(CENTER);
         if (sling === 1) {
-            image(slingImg1, -15, -15);
+            image(slingImg1, -15 / adjustedRatio, -15 / adjustedRatio, 47 / adjustedRatio, 196 / adjustedRatio);
         }
         if (sling === 2) {
-            image(slingImg2, 8, -15);
+            image(slingImg2, 8 / adjustedRatio, -15 / adjustedRatio, 38 / adjustedRatio, 196 / adjustedRatio);
         }
         // rect(0, 0, this.w, this.h);
         pop();
